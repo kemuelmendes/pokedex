@@ -1,6 +1,6 @@
 # pokedex
 
-A new Flutter project.
+Vai ser atualizado em breve
 
 ## Getting Started
 
