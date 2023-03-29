@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:pokedex/Widgets/custom_text_form_field.dart';
 import 'package:pokedex/models/user_model.dart';
-
 import 'package:pokedex/screens/home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({Key? key}) : super(key: key);
@@ -11,6 +13,7 @@ class SignUpScreen extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
+  bool showPassword = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,12 +78,20 @@ class SignUpScreen extends StatelessWidget {
 
   void _doSignUp() {
     User newUser = User(
-      user: _nameController.text,
-      email: _emailController.text,
-      password: _passwordController.text,
-      keepOn: true,
-    );
-
+        name: _nameController.text,
+        mail: _emailController.text,
+        password: _passwordController.text,
+        keepOn: false);
     print(newUser);
+
+    _saveUser(newUser);
+  }
+
+  void _saveUser(User user) async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString(
+      "LOGIN_USER_INFOS",
+      json.encode(user.toJson()),
+    );
   }
 }

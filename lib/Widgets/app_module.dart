@@ -7,6 +7,6 @@ class AppModule extends Module {
   @override
   List<ModularRoute> get routes => [
         ModuleRoute('/', module: HomeModule()),
-        ChildRoute('/loginpage', child: (context, args) => LoginScreen())
+        ChildRoute('/loginpag', child: (context, args) => LoginScreen())
       ];
 }

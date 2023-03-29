@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:pokedex/Widgets/custom_text_form_field.dart';
+import 'package:pokedex/models/user_model.dart';
 import 'package:pokedex/screens/home_screen.dart';
 import 'package:pokedex/screens/sign_up_screen.dart';
 import 'package:pokedex/stores/login_store.dart';
+import 'package:pokedex/values/preferences_keys.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -83,6 +88,7 @@ class LoginScreen extends StatelessWidget {
                   return InkWell(
                     onTap: loginStore.isFormValid
                         ? () {
+                            _doLogin();
                             loginStore.login();
                             Navigator.of(context).push(
                               MaterialPageRoute(
@@ -135,5 +141,29 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _doLogin() async {
+    String mailForm = this._emailController.text;
+    String passForm = this._passwordController.text;
+
+    User savedUser = await _getSavedUser();
+    print(savedUser);
+  }
+
+  Future<User> _getSavedUser() async {
+    var prefs = await SharedPreferences.getInstance();
+    String? jsonUser = prefs.getString(PreferencesKeys.activeUser);
+
+    if (jsonUser != null) {
+      Map<String, dynamic> mapUser = json.decode(jsonUser);
+      User user = User.fromJson(mapUser as String);
+      return user;
+    } else {
+      return User(
+          name: "",
+          mail: _emailController.text,
+          password: _passwordController.text);
+    }
   }
 }

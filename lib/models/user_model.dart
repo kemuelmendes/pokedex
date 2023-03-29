@@ -1,28 +1,47 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 class User {
-  String? user;
+  String? name;
   String? mail;
   String? password;
   bool? keepOn;
+  User({
+    required this.name,
+    required this.mail,
+    required this.password,
+    this.keepOn,
+  });
 
-  User({this.user, this.mail, this.password, this.keepOn, required email});
-
-  User.fromJson(Map<String, dynamic> json) {
-    user = json['user'];
-    mail = json['mail'];
-    password = json['password'];
-    keepOn = json['keepOn'];
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'name': name,
+      'mail': mail,
+      'password': password,
+      'keepOn': keepOn,
+    };
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.user;
-    data['mail'] = this.mail;
-    data['password'] = this.password;
-    data['keepOn'] = this.keepOn;
-    return data;
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      name: map['name'] != null ? map['name'] as String : null,
+      mail: map['mail'] != null ? map['mail'] as String : null,
+      password: map['password'] != null ? map['password'] as String : null,
+      keepOn: map['keepOn'] != null ? map['keepOn'] as bool : null,
+    );
   }
 
   String toString() {
-    return "Name: " "\nE-mail: " + "\nPassword: ";
+    return "Name: " +
+        this.name! +
+        "\nE-mail: " +
+        this.mail! +
+        "\nPassword: " +
+        this.password!;
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory User.fromJson(String source) =>
+      User.fromMap(json.decode(source) as Map<String, dynamic>);
 }
